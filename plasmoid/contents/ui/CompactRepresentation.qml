@@ -52,28 +52,14 @@ Loader {
         }
     }
 
-    PlasmaComponents.BusyIndicator {
-        id: busyIndicator
-        anchors.fill: parent
-        visible: false
-        running: false
-
-        states: [
-            State {
-                name: 'loading'
-                when: root.appState === showLOADING
-
-                PropertyChanges {
-                    target: busyIndicator
-                    visible: true
-                    running: true
-                }
-
-                PropertyChanges {
-                    target: compactItem
-                }
-            }
-        ]
+    // Static loading text instead of an animated BusyIndicator: an infinite render-thread
+    // animation at login keeps the desktop window redrawing while the panel initialises,
+    // which correlates with plasmashell crashes on NVIDIA GB206 (threaded GL).
+    PlasmaComponents.Label {
+        id: loadingLabel
+        anchors.centerIn: parent
+        visible: root.appState === showLOADING
+        text: i18n("Loading…")
     }
 
     MouseArea {

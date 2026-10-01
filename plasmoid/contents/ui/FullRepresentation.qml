@@ -121,9 +121,10 @@ ColumnLayout {
         Layout.fillWidth: true
         Layout.fillHeight: true
 
-        PlasmaComponents.BusyIndicator {
+        // Static text instead of an animated BusyIndicator (see CompactRepresentation.qml).
+        PlasmaComponents.Label {
             anchors.centerIn: parent
-            running: visible
+            text: i18n("Loading…")
         }
     }
 
