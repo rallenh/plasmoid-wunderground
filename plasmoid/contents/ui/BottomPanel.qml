@@ -40,6 +40,7 @@ RowLayout {
         Layout.preferredWidth: 1
 
         color: Kirigami.Theme.disabledTextColor
+        font.pointSize: secondaryPointSize
     }
 
     Item {
@@ -66,6 +67,8 @@ RowLayout {
                 text: plasmoid.configuration.stationName
 
                 color: Kirigami.Theme.disabledTextColor
+
+                font.pointSize: secondaryPointSize
             }
         }
     }
@@ -99,6 +102,8 @@ RowLayout {
 
                 color: Kirigami.Theme.disabledTextColor
 
+                font.pointSize: secondaryPointSize
+
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
@@ -122,6 +127,8 @@ RowLayout {
                 id: elevationLabel
 
                 color: Kirigami.Theme.disabledTextColor
+
+                font.pointSize: secondaryPointSize
 
                 text: "   " + Utils.currentElevUnit(Utils.toUserElev(weatherData["details"]["elev"]))
             }

@@ -18,11 +18,14 @@
 import QtQml
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls as QQC2
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import "../code/utils.js" as Utils
 import "../code/pws-api.js" as StationAPI
 import "../code/cache.js" as Cache
+import "../code/contrast.js" as Contrast
 
 PlasmoidItem {
     id: root
@@ -147,8 +150,23 @@ PlasmoidItem {
     property var textSize: ({
             normal: plasmoid.configuration.propPointSize,
             small: plasmoid.configuration.propPointSize - 1,
-            tiny: plasmoid.configuration.propPointSize - 2
+            tiny: plasmoid.configuration.chartPointSize > 0 ? plasmoid.configuration.chartPointSize : plasmoid.configuration.propPointSize - 2
         })
+
+    // Text settings (Text page): one font family for everything, and text colours by mode:
+    // 0 = theme colours, 1 = custom colours, 2 = automatic contrast against the wallpaper.
+    // Secondary text (bottom row) is the primary colour at 75 % unless a custom secondary colour is set.
+    readonly property string textFamily: plasmoid.configuration.fontFamily !== "" ? plasmoid.configuration.fontFamily : Kirigami.Theme.defaultFont.family
+    readonly property int textColorMode: plasmoid.configuration.textColorMode
+    // last automatic colour, saved in the config so start-up uses it right away (the wallpaper is analysed later)
+    property color autoTextColor: plasmoid.configuration.autoContrastColor !== "" ? plasmoid.configuration.autoContrastColor : Kirigami.Theme.textColor
+    readonly property color primaryTextColor: textColorMode === 1 ? plasmoid.configuration.customPrimaryColor
+                                            : textColorMode === 2 ? autoTextColor
+                                            : Kirigami.Theme.textColor
+    readonly property color secondaryTextColor: (textColorMode === 1 && plasmoid.configuration.customSecondaryColor !== "")
+                                              ? plasmoid.configuration.customSecondaryColor
+                                              : Qt.rgba(primaryTextColor.r, primaryTextColor.g, primaryTextColor.b, 0.75)
+    readonly property real secondaryPointSize: plasmoid.configuration.secondaryPointSize > 0 ? plasmoid.configuration.secondaryPointSize : Kirigami.Theme.defaultFont.pointSize
 
     property var maxValDict: ({
             temperature: -999,
@@ -213,9 +231,17 @@ PlasmoidItem {
             }
         })
 
-    property Component fr: FullRepresentation {
+    // The full view sits in a Control so the font family and the text colours set here reach every label
+    // inside (Plasma labels inherit the font from the nearest Control and take their colour from the theme).
+    property Component fr: QQC2.Control {
         Layout.preferredWidth: 650
         Layout.preferredHeight: 480
+        padding: 0
+        background: null
+        font.family: root.textFamily
+        Kirigami.Theme.textColor: root.primaryTextColor
+        Kirigami.Theme.disabledTextColor: root.secondaryTextColor
+        contentItem: FullRepresentation {}
     }
     property Component cr: CompactRepresentation {}
     property Component crInTray: CompactRepresentationInTray {}
@@ -313,6 +339,74 @@ PlasmoidItem {
         if (!restoreSnapshot())
             appState = showLOADING;
         updateWeatherData();
+    }
+
+    // Automatic text colour: analyse the wallpaper the containment is showing (once, not per frame),
+    // 30 s after start-up (well after login), when the wallpaper changes, then every 30 minutes.
+    Kirigami.ImageColors {
+        id: wallpaperColors
+        onPaletteChanged: root.updateAutoContrast()
+    }
+
+    function analyseWallpaper() {
+        if (textColorMode !== 2)
+            return;
+        var wallpaper = plasmoid.containment ? plasmoid.containment.wallpaperGraphicsObject : null;
+        if (!wallpaper) {
+            printDebug("No wallpaper item to analyse");
+            return;
+        }
+        wallpaperColors.source = wallpaper;
+        wallpaperColors.update();
+    }
+
+    function updateAutoContrast() {
+        var palette = wallpaperColors.palette;
+        if (!palette || palette.length === 0)
+            return;
+        var background = wallpaperColors.average;
+        var colour;
+        if (plasmoid.configuration.autoContrastStyle === 1) {
+            var tint = palette[0].color;
+            for (var i = 1; i < palette.length; i++) {
+                if (palette[i].color.hslSaturation > tint.hslSaturation)
+                    tint = palette[i].color;
+            }
+            colour = Contrast.tinted(background, tint);
+        } else {
+            colour = Contrast.blackOrWhite(background);
+        }
+        var hex = Contrast.toHex(colour);
+        printDebug("Wallpaper average " + Contrast.toHex(background) + " -> text " + hex);
+        autoTextColor = hex;
+        if (plasmoid.configuration.autoContrastColor !== hex)
+            plasmoid.configuration.autoContrastColor = hex;
+    }
+
+    Timer {
+        id: wallpaperTimer
+        interval: 30 * 1000
+        repeat: true
+        running: textColorMode === 2
+        onTriggered: {
+            root.analyseWallpaper();
+            interval = 30 * 60 * 1000;
+        }
+    }
+
+    Connections {
+        target: plasmoid.containment
+        ignoreUnknownSignals: true
+        function onWallpaperGraphicsObjectChanged() {
+            wallpaperTimer.interval = 5 * 1000;
+            wallpaperTimer.restart();
+        }
+    }
+
+    Connections {
+        target: plasmoid.configuration
+        function onAutoContrastStyleChanged() { root.analyseWallpaper(); }
+        function onTextColorModeChanged() { root.analyseWallpaper(); }
     }
 
     function delay(delayTime, cb) {
