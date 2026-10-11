@@ -88,7 +88,7 @@ ColumnLayout {
                     }
 
                     PlasmaComponents.Label {
-                        text: Qt.formatDateTime(weatherData["sunrise"], plasmoid.configuration.sunMoonTimeFormat)
+                        text: Qt.formatDateTime(weatherData["sunrise"], root.sunMoonFormat)
                         font.pointSize: plasmoid.configuration.propPointSize
                         font.bold: true
                     }
@@ -137,7 +137,7 @@ ColumnLayout {
                     }
 
                     PlasmaComponents.Label {
-                        text: Qt.formatDateTime(weatherData["sunset"], plasmoid.configuration.sunMoonTimeFormat)
+                        text: Qt.formatDateTime(weatherData["sunset"], root.sunMoonFormat)
                         font.pointSize: plasmoid.configuration.propPointSize
                         font.bold: true
                     }
@@ -222,7 +222,7 @@ ColumnLayout {
                     }
 
                     PlasmaComponents.Label {
-                        text: Qt.formatDateTime(weatherData["moonrise"], plasmoid.configuration.sunMoonTimeFormat)
+                        text: Qt.formatDateTime(weatherData["moonrise"], root.sunMoonFormat)
                         font.pointSize: plasmoid.configuration.propPointSize
                         font.bold: true
                     }
@@ -244,7 +244,7 @@ ColumnLayout {
                     }
 
                     PlasmaComponents.Label {
-                        text: Qt.formatDateTime(weatherData["moonset"], plasmoid.configuration.sunMoonTimeFormat)
+                        text: Qt.formatDateTime(weatherData["moonset"], root.sunMoonFormat)
                         font.pointSize: plasmoid.configuration.propPointSize
                         font.bold: true
                     }
@@ -338,6 +338,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Wind from: %1 (%2°)", Utils.windDirToCard(weatherData["winddir"]), weatherData["winddir"])
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -365,6 +366,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Wind & Gust")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -393,6 +395,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Dew Point")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -421,6 +424,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Precip Rate")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -449,6 +453,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Pressure")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -504,6 +509,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Humidity")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -532,6 +538,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("Precip Accum")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter
@@ -560,6 +567,7 @@ ColumnLayout {
             PlasmaComponents.Label {
                 text: i18n("UV")
                 font.pointSize: plasmoid.configuration.propHeadPointSize
+                font.bold: plasmoid.configuration.boldHeadings
                 Layout.alignment: Qt.AlignCenter
                 wrapMode: Text.WordWrap
                 horizontalAlignment: Text.AlignHCenter

@@ -31,9 +31,6 @@ KCM.SimpleKCM {
     property int cfg_propIconSize
     property int cfg_forecastIconSize
 
-    property alias cfg_propHeadPointSize: propHeadPointSize.value
-    property alias cfg_propPointSize: propPointSize.value
-    property alias cfg_tempPointSize: tempPointSize.value
     property alias cfg_propIconSizeIndex: propIconSize.currentIndex
     property alias cfg_forecastIconSizeIndex: forecastIconSize.currentIndex
     property alias cfg_topIconMargins: topIconMargins.value
@@ -189,30 +186,6 @@ KCM.SimpleKCM {
         Kirigami.Separator {
             Kirigami.FormData.label: i18n("Full Representation")
             Kirigami.FormData.isSection: true
-        }
-
-        QQC.SpinBox {
-            id: propHeadPointSize
-
-            editable: true
-
-            Kirigami.FormData.label: i18n("Property header text size")
-        }
-
-        QQC.SpinBox {
-            id: propPointSize
-
-            editable: true
-
-            Kirigami.FormData.label: i18n("Property text size")
-        }
-
-        QQC.SpinBox {
-            id: tempPointSize
-
-            editable: true
-
-            Kirigami.FormData.label: i18n("Temperature text size")
         }
 
         QQC.ComboBox {

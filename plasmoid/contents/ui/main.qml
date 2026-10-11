@@ -18,10 +18,14 @@
 import QtQml
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls as QQC2
+import org.kde.kirigami as Kirigami
 import org.kde.plasma.plasmoid
 import org.kde.plasma.core as PlasmaCore
 import "../code/utils.js" as Utils
 import "../code/pws-api.js" as StationAPI
+import "../code/cache.js" as Cache
+import "../code/contrast.js" as Contrast
 
 PlasmoidItem {
     id: root
@@ -133,11 +137,38 @@ PlasmoidItem {
 
     property bool hasLoaded: false
 
+    // Cache-first: the last successful data is shown immediately at start-up (no loading phase, no network
+    // needed); refreshes run in the background and keep showing that data, marked offline, if they fail.
+    // The raw API rows are kept so they can be cached; the ListModels are filled from them in one go.
+    property var rawForecast: []
+    property var rawHourly: []
+    property var rawAlerts: []
+    property var rawKpPredictions: []
+    property bool offline: false     // the last refresh failed; the data shown is older
+    property double dataSavedAt: 0   // when the data shown was fetched (ms since epoch), 0 = never
+
     property var textSize: ({
             normal: plasmoid.configuration.propPointSize,
             small: plasmoid.configuration.propPointSize - 1,
-            tiny: plasmoid.configuration.propPointSize - 2
+            tiny: plasmoid.configuration.chartPointSize > 0 ? plasmoid.configuration.chartPointSize : plasmoid.configuration.propPointSize - 2
         })
+
+    // Text settings (Text page): one font family for everything, and text colours by mode:
+    // 0 = theme colours, 1 = custom colours, 2 = automatic contrast against the wallpaper.
+    // Secondary text (bottom row) is the primary colour at 75 % unless a custom secondary colour is set.
+    readonly property string textFamily: plasmoid.configuration.fontFamily !== "" ? plasmoid.configuration.fontFamily : Kirigami.Theme.defaultFont.family
+    readonly property int textColorMode: plasmoid.configuration.textColorMode
+    // last automatic colour, saved in the config so start-up uses it right away (the wallpaper is analysed later)
+    property color autoTextColor: plasmoid.configuration.autoContrastColor !== "" ? plasmoid.configuration.autoContrastColor : Kirigami.Theme.textColor
+    readonly property color primaryTextColor: textColorMode === 1 ? plasmoid.configuration.customPrimaryColor
+                                            : textColorMode === 2 ? autoTextColor
+                                            : Kirigami.Theme.textColor
+    readonly property color secondaryTextColor: (textColorMode === 1 && plasmoid.configuration.customSecondaryColor !== "")
+                                              ? plasmoid.configuration.customSecondaryColor
+                                              : Qt.rgba(primaryTextColor.r, primaryTextColor.g, primaryTextColor.b, 0.75)
+    // Sun/moon times: the configured format, or KDE's time format (Region & Language) when empty
+    readonly property string sunMoonFormat: plasmoid.configuration.sunMoonTimeFormat !== "" ? plasmoid.configuration.sunMoonTimeFormat : Qt.locale().timeFormat(Locale.ShortFormat)
+    readonly property real secondaryPointSize: plasmoid.configuration.secondaryPointSize > 0 ? plasmoid.configuration.secondaryPointSize : Kirigami.Theme.defaultFont.pointSize
 
     property var maxValDict: ({
             temperature: -999,
@@ -202,9 +233,17 @@ PlasmoidItem {
             }
         })
 
-    property Component fr: FullRepresentation {
+    // The full view sits in a Control so the font family and the text colours set here reach every label
+    // inside (Plasma labels inherit the font from the nearest Control and take their colour from the theme).
+    property Component fr: QQC2.Control {
         Layout.preferredWidth: 650
         Layout.preferredHeight: 480
+        padding: 0
+        background: null
+        font.family: root.textFamily
+        Kirigami.Theme.textColor: root.primaryTextColor
+        Kirigami.Theme.disabledTextColor: root.secondaryTextColor
+        contentItem: FullRepresentation {}
     }
     property Component cr: CompactRepresentation {}
     property Component crInTray: CompactRepresentationInTray {}
@@ -222,6 +261,154 @@ PlasmoidItem {
         if (plasmoid.configuration.logConsole) {
             console.log("[debug] [main.qml] " + JSON.stringify(json));
         }
+    }
+
+    function cacheKey() {
+        return "weather|" + stationID + "|" + unitsChoice + "|" + Qt.locale().name;
+    }
+
+    function fillModel(model, rows) {
+        model.clear();
+        if (rows && rows.length)
+            model.append(rows);
+    }
+
+    function saveSnapshot() {
+        dataSavedAt = Date.now();
+        offline = false;
+        Cache.save(cacheKey(), {
+            weatherData: weatherData,
+            iconCode: iconCode,
+            conditionNarrative: conditionNarrative,
+            isRain: isRain,
+            currDayHigh: currDayHigh,
+            currDayLow: currDayLow,
+            showForecast: showForecast,
+            forecast: rawForecast,
+            hourly: rawHourly,
+            alerts: rawAlerts,
+            kpPredictions: rawKpPredictions,
+            maxValDict: maxValDict,
+            rangeValDict: rangeValDict
+        });
+    }
+
+    // Show the cached data for the current station/units, if any. Returns true when data is shown.
+    function restoreSnapshot() {
+        var cached = Cache.load(cacheKey());
+        if (cached === null || !cached.value || !cached.value.weatherData)
+            return false;
+        var snap = cached.value;
+        // JSON turned Date values into strings: revive the ones the views format as dates
+        rawForecast = (snap.forecast || []).map(function (row) { row.date = new Date(row.date); return row; });
+        rawHourly = (snap.hourly || []).map(function (row) { row.time = new Date(row.time); return row; });
+        rawAlerts = snap.alerts || [];
+        rawKpPredictions = snap.kpPredictions || [];
+        fillModel(forecastModel, rawForecast);
+        fillModel(hourlyModel, rawHourly);
+        fillModel(alertsModel, rawAlerts);
+        fillModel(kpPredictionsModel, rawKpPredictions);
+        if (snap.maxValDict)
+            maxValDict = snap.maxValDict;
+        if (snap.rangeValDict)
+            rangeValDict = snap.rangeValDict;
+        iconCode = snap.iconCode;
+        conditionNarrative = snap.conditionNarrative;
+        isRain = snap.isRain;
+        currDayHigh = snap.currDayHigh;
+        currDayLow = snap.currDayLow;
+        showForecast = snap.showForecast;
+        weatherData = snap.weatherData;
+        dataSavedAt = cached.saved;
+        appState = showDATA;
+        printDebug("Showing cached data from " + new Date(cached.saved));
+        return true;
+    }
+
+    // A fetch failed: keep showing the data we have (marked offline); the error screen only when there's nothing to show.
+    function fetchFailed(err) {
+        errorStr = err.message || JSON.stringify(err);
+        errorType = err.type || JSON.stringify(err);
+        printDebug(errorStr);
+        if (appState === showDATA)
+            offline = true;
+        else
+            appState = showERROR;
+    }
+
+    // Start-up and station/units changes: cached data at once if there is any, then refresh.
+    function showCachedThenRefresh() {
+        if (!restoreSnapshot())
+            appState = showLOADING;
+        updateWeatherData();
+    }
+
+    // Automatic text colour: analyse the wallpaper the containment is showing (once, not per frame),
+    // 30 s after start-up (well after login), when the wallpaper changes, then every 30 minutes.
+    Kirigami.ImageColors {
+        id: wallpaperColors
+        onPaletteChanged: root.updateAutoContrast()
+    }
+
+    function analyseWallpaper() {
+        if (textColorMode !== 2)
+            return;
+        var wallpaper = plasmoid.containment ? plasmoid.containment.wallpaperGraphicsObject : null;
+        if (!wallpaper) {
+            printDebug("No wallpaper item to analyse");
+            return;
+        }
+        wallpaperColors.source = wallpaper;
+        wallpaperColors.update();
+    }
+
+    function updateAutoContrast() {
+        var palette = wallpaperColors.palette;
+        if (!palette || palette.length === 0)
+            return;
+        var background = wallpaperColors.average;
+        var colour;
+        if (plasmoid.configuration.autoContrastStyle === 1) {
+            var tint = palette[0].color;
+            for (var i = 1; i < palette.length; i++) {
+                if (palette[i].color.hslSaturation > tint.hslSaturation)
+                    tint = palette[i].color;
+            }
+            colour = Contrast.tinted(background, tint);
+        } else {
+            colour = Contrast.blackOrWhite(background);
+        }
+        var hex = Contrast.toHex(colour);
+        printDebug("Wallpaper average " + Contrast.toHex(background) + " -> text " + hex);
+        autoTextColor = hex;
+        if (plasmoid.configuration.autoContrastColor !== hex)
+            plasmoid.configuration.autoContrastColor = hex;
+    }
+
+    Timer {
+        id: wallpaperTimer
+        interval: 30 * 1000
+        repeat: true
+        running: textColorMode === 2
+        onTriggered: {
+            root.analyseWallpaper();
+            interval = 30 * 60 * 1000;
+        }
+    }
+
+    Connections {
+        target: plasmoid.containment
+        ignoreUnknownSignals: true
+        function onWallpaperGraphicsObjectChanged() {
+            wallpaperTimer.interval = 5 * 1000;
+            wallpaperTimer.restart();
+        }
+    }
+
+    Connections {
+        target: plasmoid.configuration
+        function onAutoContrastStyleChanged() { root.analyseWallpaper(); }
+        function onTextColorModeChanged() { root.analyseWallpaper(); }
     }
 
     function delay(delayTime, cb) {
@@ -251,10 +438,7 @@ PlasmoidItem {
                 oldWeatherData: weatherData
             }, function (err, curRes) {
                 if (err) {
-                    errorStr = err.message || JSON.stringify(err);
-                    errorType = err.type || JSON.stringify(err);
-                    printDebug(errorStr);
-                    appState = showERROR;
+                    fetchFailed(err);
                     return;
                 }
 
@@ -283,11 +467,8 @@ PlasmoidItem {
                     conditionNarrative = extRes.conditionNarrative || conditionNarrative;
                     isRain = extRes.isRain;
 
-                    alertsModel.clear();
-                    if (extRes.alerts && extRes.alerts.length) {
-                        for (var ai = 0; ai < extRes.alerts.length; ai++)
-                            alertsModel.append(extRes.alerts[ai]);
-                    }
+                    rawAlerts = extRes.alerts || [];
+                    fillModel(alertsModel, rawAlerts);
 
                     // Merge extended info into weatherData
                     var merged = JSON.parse(JSON.stringify(weatherData));
@@ -311,17 +492,12 @@ PlasmoidItem {
                         language: Qt.locale().name.replace("_", "-")
                     }, function (err3, fcRes) {
                         if (err3) {
-                            errorStr = err3.message || JSON.stringify(err3);
-                            errorType = err3.type || JSON.stringify(err3);
-                            printDebug(errorStr);
-                            appState = showERROR;
+                            fetchFailed(err3);
                             return;
                         }
 
-                        forecastModel.clear();
-                        for (var i = 0; i < fcRes.forecast.length; i++) {
-                            forecastModel.append(fcRes.forecast[i]);
-                        }
+                        rawForecast = fcRes.forecast;
+                        fillModel(forecastModel, rawForecast);
                         currDayHigh = fcRes.currDayHigh;
                         currDayLow = fcRes.currDayLow;
                         var updated = JSON.parse(JSON.stringify(weatherData));
@@ -343,19 +519,16 @@ PlasmoidItem {
                             language: Qt.locale().name.replace("_", "-")
                         }, function (err4, hrRes) {
                             if (err4) {
-                                errorStr = err4.message || JSON.stringify(err4);
-                                errorType = err4.type || JSON.stringify(err4);
-                                printDebug(errorStr);
-                                appState = showERROR;
+                                fetchFailed(err4);
                                 return;
                             }
 
-                            hourlyModel.clear();
-                            for (var h = 0; h < hrRes.hourly.length; h++)
-                                hourlyModel.append(hrRes.hourly[h]);
-                            // update the chart metadata
+                            // update the chart metadata first, then the rows (one model update instead of one per row)
                             maxValDict = hrRes.maxValDict;
                             rangeValDict = hrRes.rangeValDict;
+                            rawHourly = hrRes.hourly;
+                            fillModel(hourlyModel, rawHourly);
+                            saveSnapshot();
 
                             printDebug("Got hourly data");
 
@@ -374,13 +547,12 @@ PlasmoidItem {
                                     updated["kp-health"] = 10 * (0.35 * updated["kp-index"] + 0.4 * presComp + 0.25 * tempComp);
                                     updated["kp-color"] = updated["kp-health"] <= 4 ? "#00FF00" : updated["kp-health"] <= 7 ? "#FFFF00" : "#FF0000";
 
-                                    kpPredictionsModel.clear();
-                                    for (var p = 0; p < kpRes.predictions.length; p++) {
-                                        kpPredictionsModel.append(kpRes.predictions[p]);
-                                    }
+                                    rawKpPredictions = kpRes.predictions;
+                                    fillModel(kpPredictionsModel, rawKpPredictions);
 
                                     weatherData = updated;
                                     printDebug("Got KP index data");
+                                    saveSnapshot();
                                 }
                             });
                         });
@@ -402,14 +574,12 @@ PlasmoidItem {
             oldWeatherData: weatherData
         }, function (err, curRes) {
             if (err) {
-                errorStr = err.message || JSON.stringify(err);
-                errorType = err.type || JSON.stringify(err);
-                appState = showERROR;
-                printDebug(errorStr);
+                fetchFailed(err);
                 return;
             }
             weatherData = curRes.weatherData;
             printDebug("Got new current data");
+            saveSnapshot();
 
             // Fetch KP index data
             StationAPI.getKpIndexData(function (err, kpRes) {
@@ -426,13 +596,12 @@ PlasmoidItem {
                     updated["kp-health"] = 10 * (0.35 * updated["kp-index"] + 0.4 * presComp + 0.25 * tempComp);
                     updated["kp-color"] = updated["kp-health"] <= 4 ? "#00FF00" : updated["kp-health"] <= 7 ? "#FFFF00" : "#FF0000";
 
-                    kpPredictionsModel.clear();
-                    for (var p = 0; p < kpRes.predictions.length; p++) {
-                        kpPredictionsModel.append(kpRes.predictions[p]);
-                    }
+                    rawKpPredictions = kpRes.predictions;
+                    fillModel(kpPredictionsModel, rawKpPredictions);
 
                     weatherData = updated;
                     printDebug("Got KP index data");
+                    saveSnapshot();
                 }
             });
             appState = showDATA;
@@ -457,11 +626,8 @@ PlasmoidItem {
             iconCode = extRes.iconCode || iconCode;
             conditionNarrative = extRes.conditionNarrative || conditionNarrative;
             isRain = extRes.isRain;
-            alertsModel.clear();
-            if (extRes.alerts && extRes.alerts.length) {
-                for (var ai = 0; ai < extRes.alerts.length; ai++)
-                    alertsModel.append(extRes.alerts[ai]);
-            }
+            rawAlerts = extRes.alerts || [];
+            fillModel(alertsModel, rawAlerts);
             var merged = JSON.parse(JSON.stringify(weatherData));
             merged.isNight = extRes.isNight;
             merged.sunrise = extRes.sunriseTimeLocal || merged.sunrise;
@@ -482,16 +648,12 @@ PlasmoidItem {
                 language: Qt.locale().name.replace("_", "-")
             }, function (err2, fcRes) {
                 if (err2) {
-                    errorStr = err2.message || JSON.stringify(err2);
-                    errorType = err2.type || JSON.stringify(err2);
-                    printDebug(errorStr);
-                    appState = showERROR;
+                    fetchFailed(err2);
                     return;
                 }
 
-                forecastModel.clear();
-                for (var k = 0; k < fcRes.forecast.length; k++)
-                    forecastModel.append(fcRes.forecast[k]);
+                rawForecast = fcRes.forecast;
+                fillModel(forecastModel, rawForecast);
                 currDayHigh = fcRes.currDayHigh;
                 currDayLow = fcRes.currDayLow;
                 var updated = JSON.parse(JSON.stringify(weatherData));
@@ -511,17 +673,14 @@ PlasmoidItem {
                     language: Qt.locale().name.replace("_", "-")
                 }, function (err3, hrRes) {
                     if (err3) {
-                        errorStr = err3.message || JSON.stringify(err3);
-                        errorType = err3.type || JSON.stringify(err3);
-                        printDebug(errorStr);
-                        appState = showERROR;
+                        fetchFailed(err3);
                         return;
                     }
-                    hourlyModel.clear();
-                    for (var hh = 0; hh < hrRes.hourly.length; hh++)
-                        hourlyModel.append(hrRes.hourly[hh]);
                     maxValDict = hrRes.maxValDict;
                     rangeValDict = hrRes.rangeValDict;
+                    rawHourly = hrRes.hourly;
+                    fillModel(hourlyModel, rawHourly);
+                    saveSnapshot();
 
                     printDebug("Got hourly data");
 
@@ -537,13 +696,12 @@ PlasmoidItem {
                             updated["kp-health"] = 10 - (0.35 * updated["kp-index"] + 0.4 * calcDeltaP + 0.25 * calcTemp);
                             updated["kp-color"] = updated["kp-health"] >= 7 ? "#00FF00" : updated["kp-health"] >= 4 ? "#FFFF00" : "#FF0000";
 
-                            kpPredictionsModel.clear();
-                            for (var p = 0; p < kpRes.predictions.length; p++) {
-                                kpPredictionsModel.append(kpRes.predictions[p]);
-                            }
+                            rawKpPredictions = kpRes.predictions;
+                            fillModel(kpPredictionsModel, rawKpPredictions);
                             
                             weatherData = updated;
                             printDebug("Got KP index data");
+                            saveSnapshot();
                         }
                     });
                 });
@@ -555,9 +713,7 @@ PlasmoidItem {
         printDebug("Station ID changed");
 
         if (stationID != "") {
-            // Show loading screen after ID change
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         } else if (stationID == "") {
             appState = showCONFIG;
         }
@@ -568,9 +724,7 @@ PlasmoidItem {
 
         // A user could configure units but not station id. This would trigger improper request.
         if (stationID != "") {
-            // Show loading screen after units change
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         }
     }
 
@@ -578,8 +732,7 @@ PlasmoidItem {
         printDebug("Temp Units changed");
 
         if (stationID != "") {
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         }
     }
 
@@ -587,8 +740,7 @@ PlasmoidItem {
         printDebug("Wind Units changed");
 
         if (stationID != "") {
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         }
     }
 
@@ -596,8 +748,7 @@ PlasmoidItem {
         printDebug("Rain Units changed");
 
         if (stationID != "") {
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         }
     }
 
@@ -605,8 +756,7 @@ PlasmoidItem {
         printDebug("Snow Units changed");
 
         if (stationID != "") {
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         }
     }
 
@@ -614,8 +764,7 @@ PlasmoidItem {
         printDebug("Pres Units changed");
 
         if (stationID != "") {
-            appState = showLOADING;
-            updateWeatherData();
+            showCachedThenRefresh();
         }
     }
 
@@ -640,7 +789,9 @@ PlasmoidItem {
         // Plasma::Types::FormFactor::Horizonal = 2
         inTray = plasmoid.containment.containmentType == 129 && plasmoid.formFactor == 2;
         plasmoid.configurationRequiredReason = i18n("Set the weather station to pull data from.");
-        plasmoid.backgroundHints = PlasmaCore.Types.DefaultBackground | PlasmaCore.Types.ConfigurableBackground;
+        // Default: no background (see-through, flat). ShadowBackground re-renders the whole widget offscreen every
+        // frame, which with an animation running crashed plasmashell on NVIDIA (see README "background").
+        plasmoid.backgroundHints = PlasmaCore.Types.NoBackground | PlasmaCore.Types.ConfigurableBackground;
 
         if (plasmoid.configuration.refreshPeriod < 300) {
             plasmoid.configuration.refreshPeriod = 300;
@@ -652,7 +803,6 @@ PlasmoidItem {
         running: appState != showCONFIG
         repeat: true
         onTriggered: updateCurrentData()
-        triggeredOnStart: true
     }
 
     Timer {
@@ -660,7 +810,6 @@ PlasmoidItem {
         running: appState != showCONFIG
         repeat: true
         onTriggered: updateForecastData()
-        triggeredOnStart: true
     }
 
     toolTipTextFormat: Text.RichText

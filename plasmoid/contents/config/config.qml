@@ -30,6 +30,12 @@ ConfigModel {
     }
 
     ConfigCategory {
+        name: i18n("Text")
+        icon: "preferences-desktop-font"
+        source: "config/ConfigText.qml"
+    }
+
+    ConfigCategory {
         name: i18n("Layout")
         icon: "view-grid"
         source: "config/ConfigLayout.qml"

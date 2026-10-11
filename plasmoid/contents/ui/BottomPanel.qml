@@ -31,7 +31,8 @@ RowLayout {
     PlasmaComponents.Label {
         id: bottomPanelTime
 
-        text: weatherData["obsTimeLocal"] + " (" + plasmoid.configuration.refreshPeriod + "s)"
+        // "offline": the last refresh failed, the data shown is from the cache / an earlier fetch
+        text: weatherData["obsTimeLocal"] + (offline ? " · " + i18n("offline") : " (" + plasmoid.configuration.refreshPeriod + "s)")
 
         horizontalAlignment: Text.AlignLeft
 
@@ -39,6 +40,7 @@ RowLayout {
         Layout.preferredWidth: 1
 
         color: Kirigami.Theme.disabledTextColor
+        font.pointSize: secondaryPointSize
     }
 
     Item {
@@ -65,6 +67,8 @@ RowLayout {
                 text: plasmoid.configuration.stationName
 
                 color: Kirigami.Theme.disabledTextColor
+
+                font.pointSize: secondaryPointSize
             }
         }
     }
@@ -98,6 +102,8 @@ RowLayout {
 
                 color: Kirigami.Theme.disabledTextColor
 
+                font.pointSize: secondaryPointSize
+
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
@@ -121,6 +127,8 @@ RowLayout {
                 id: elevationLabel
 
                 color: Kirigami.Theme.disabledTextColor
+
+                font.pointSize: secondaryPointSize
 
                 text: "   " + Utils.currentElevUnit(Utils.toUserElev(weatherData["details"]["elev"]))
             }
