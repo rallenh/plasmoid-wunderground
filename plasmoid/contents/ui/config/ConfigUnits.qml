@@ -47,7 +47,9 @@ KCM.SimpleKCM {
     property alias cfg_elevUnitsChoice: elevUnitsChoice.currentIndex
 
     onCfg_sunMoonFormatIndexChanged: {
-        if (cfg_sunMoonFormatIndex === 0) {
+        if (cfg_sunMoonFormatIndex === 3) {
+            cfg_sunMoonTimeFormat = "";
+        } else if (cfg_sunMoonFormatIndex === 0) {
             cfg_sunMoonTimeFormat = "h:mm AP";
         } else if (cfg_sunMoonFormatIndex === 1) {
             cfg_sunMoonTimeFormat = "HH:mm";
@@ -71,7 +73,7 @@ KCM.SimpleKCM {
     }
 
     onCfg_sunMoonTimeFormatChanged: {
-        if (cfg_sunMoonTimeFormat !== "h:mm AP" && cfg_sunMoonTimeFormat !== "HH:mm" && cfg_sunMoonFormatIndex !== 2) {
+        if (cfg_sunMoonTimeFormat !== "" && cfg_sunMoonTimeFormat !== "h:mm AP" && cfg_sunMoonTimeFormat !== "HH:mm" && cfg_sunMoonFormatIndex !== 2) {
             cfg_sunMoonFormatIndex = 2;
         }
     }
@@ -107,7 +109,7 @@ KCM.SimpleKCM {
             QQC.ComboBox {
                 id: sunMoonFormatChoice
 
-                model: [i18n("12hr time"),i18n("24hr time"),i18n("Custom")]
+                model: [i18n("12hr time"),i18n("24hr time"),i18n("Custom"),i18n("System (KDE): %1", Qt.locale().timeFormat(Locale.ShortFormat))]
             }
 
             QQC.TextField {

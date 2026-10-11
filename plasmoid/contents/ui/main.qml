@@ -166,6 +166,8 @@ PlasmoidItem {
     readonly property color secondaryTextColor: (textColorMode === 1 && plasmoid.configuration.customSecondaryColor !== "")
                                               ? plasmoid.configuration.customSecondaryColor
                                               : Qt.rgba(primaryTextColor.r, primaryTextColor.g, primaryTextColor.b, 0.75)
+    // Sun/moon times: the configured format, or KDE's time format (Region & Language) when empty
+    readonly property string sunMoonFormat: plasmoid.configuration.sunMoonTimeFormat !== "" ? plasmoid.configuration.sunMoonTimeFormat : Qt.locale().timeFormat(Locale.ShortFormat)
     readonly property real secondaryPointSize: plasmoid.configuration.secondaryPointSize > 0 ? plasmoid.configuration.secondaryPointSize : Kirigami.Theme.defaultFont.pointSize
 
     property var maxValDict: ({
