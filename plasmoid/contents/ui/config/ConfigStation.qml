@@ -155,19 +155,19 @@ KCM.SimpleKCM {
                 QQC.Button {
                     text: i18n("Select from Map")
                     icon.name: "earth"
-                    onClicked: stationMapSearcher.open()
+                    onClicked: stationConfig.openDialog(stationMapSearcherLoader)
                 }
 
                 QQC.Button {
                     text: i18n("Find Station")
                     icon.name: "find-location"
-                    onClicked: stationSearcher.open()
+                    onClicked: stationConfig.openDialog(stationSearcherLoader)
                 }
 
                 QQC.Button {
                     text: i18n("Manual Add")
                     icon.name: "list-add"
-                    onClicked: manualAdd.open()
+                    onClicked: stationConfig.openDialog(manualAddLoader)
                 }
 
                 Item { Layout.fillWidth: true }
@@ -215,37 +215,60 @@ KCM.SimpleKCM {
         }
     }
 
+    // The dialogs are created the first time they're opened, not with the page: the settings window rebuilds
+    // this page on every visit, and the map dialog pulls in Qt's map engine (QtLocation).
+    function openDialog(loader) {
+        loader.active = true;
+        loader.item.open();
+    }
+
     // Station Search Dialog
-    Lib.StationSearcher {
-        id: stationSearcher
-        onStationSelected: function (station) {
-            stationManager.addStation(station.stationID, station.placeName, station.latitude, station.longitude, function(err) {
-                stationConfig.errorType = err.type;
-                stationConfig.errorMessage = err.message;
-            });
-            stationSearcher.close()
+    Loader {
+        id: stationSearcherLoader
+        active: false
+        sourceComponent: Component {
+            Lib.StationSearcher {
+                id: stationSearcher
+                onStationSelected: function (station) {
+                    stationManager.addStation(station.stationID, station.placeName, station.latitude, station.longitude, function(err) {
+                        stationConfig.errorType = err.type;
+                        stationConfig.errorMessage = err.message;
+                    });
+                    stationSearcher.close()
+                }
+            }
         }
     }
 
     // Map Search Dialog
-    Lib.StationMapSearcher {
-        id: stationMapSearcher
-        onStationSelected: function (station) {
-            stationManager.addStation(station.stationID, station.address, station.latitude, station.longitude, function(err) {
-                stationConfig.errorType = err.type;
-                stationConfig.errorMessage = err.message;
-            });
+    Loader {
+        id: stationMapSearcherLoader
+        active: false
+        sourceComponent: Component {
+            Lib.StationMapSearcher {
+                onStationSelected: function (station) {
+                    stationManager.addStation(station.stationID, station.address, station.latitude, station.longitude, function(err) {
+                        stationConfig.errorType = err.type;
+                        stationConfig.errorMessage = err.message;
+                    });
+                }
+            }
         }
     }
 
     // Manual Add Dialog
-    Lib.ManualStationAdd {
-        id: manualAdd
-        onStationSelected: function (station) {
-            stationManager.addStation(station.stationID, station.address, 0, 0, function(err) {
-                stationConfig.errorType = err.type;
-                stationConfig.errorMessage = err.message;
-            });
+    Loader {
+        id: manualAddLoader
+        active: false
+        sourceComponent: Component {
+            Lib.ManualStationAdd {
+                onStationSelected: function (station) {
+                    stationManager.addStation(station.stationID, station.address, 0, 0, function(err) {
+                        stationConfig.errorType = err.type;
+                        stationConfig.errorMessage = err.message;
+                    });
+                }
+            }
         }
     }
 }

@@ -18,6 +18,7 @@
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Controls as QQC
+import QtQuick.Dialogs as Dialogs
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.kcmutils as KCM
@@ -49,27 +50,6 @@ KCM.SimpleKCM {
     property alias cfg_defaultLoadPage: defaultLoadPage.currentIndex
     property alias cfg_showPresTrend: showPresTrend.checked
 
-
-    ListModel {
-        id: fontsModel
-        Component.onCompleted: {
-            var arr = []
-            arr.push({text: i18nc("Use default font", "Default"), value: ""})
-
-            var fonts = Qt.fontFamilies()
-            var foundIndex = 0
-            for (var i = 0, j = fonts.length; i < j; ++i) {
-                if (fonts[i] === cfg_widgetFontName) {
-                    foundIndex = i
-                }
-                arr.push({text: fonts[i], value: fonts[i]})
-            }
-            append(arr)
-            if (foundIndex > 0) {
-                fontFamilyComboBox.currentIndex = foundIndex + 1
-            }
-        }
-    }
 
     QQC.ButtonGroup {
         id: iconSizeModeGroup
@@ -228,20 +208,28 @@ KCM.SimpleKCM {
             Kirigami.FormData.isSection: true
         }
 
-        QQC.ComboBox {
-            id: fontFamilyComboBox
-            currentIndex: 0
-
-            model: fontsModel
-            textRole: "text"
-
+        // A font dialog instead of a ComboBox listing every installed font: the ComboBox built one menu item per
+        // font family (1000+) every time this page was opened, which froze the settings window for ~1.5 s.
+        RowLayout {
             Kirigami.FormData.label: i18n("Choose a Font:")
+            spacing: Kirigami.Units.smallSpacing
 
-            onCurrentIndexChanged: {
-                var current = model.get(currentIndex)
-                if (current) {
-                    cfg_widgetFontName = currentIndex === 0 ? Kirigami.Theme.defaultFont.family : current.value
+            QQC.Label {
+                text: cfg_widgetFontName === "" ? i18nc("Use default font", "Default") : cfg_widgetFontName
+                font.family: cfg_widgetFontName === "" ? Kirigami.Theme.defaultFont.family : cfg_widgetFontName
+            }
+            QQC.Button {
+                text: i18n("Choose…")
+                icon.name: "preferences-desktop-font"
+                onClicked: {
+                    fontDialogLoader.active = true;
+                    fontDialogLoader.item.open();
                 }
+            }
+            QQC.Button {
+                text: i18nc("Use default font", "Default")
+                enabled: cfg_widgetFontName !== ""
+                onClicked: cfg_widgetFontName = ""
             }
         }
 
@@ -361,6 +349,18 @@ KCM.SimpleKCM {
             PlasmaComponents.Label {
                 text: i18nc("Abbreviation for seconds", "sec")
                 anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+    }
+
+    Loader {
+        id: fontDialogLoader
+        active: false
+        sourceComponent: Component {
+            Dialogs.FontDialog {
+                title: i18n("Choose a Font")
+                currentFont.family: cfg_widgetFontName === "" ? Kirigami.Theme.defaultFont.family : cfg_widgetFontName
+                onAccepted: cfg_widgetFontName = selectedFont.family
             }
         }
     }
