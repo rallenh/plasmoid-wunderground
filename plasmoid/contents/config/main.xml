@@ -248,6 +248,7 @@
         <entry name="forecastPrecision" type="Int">
             <default>0</default>
         </entry>
+        <!-- Default: Imperial (US units: °F, mph, inHg, in) -->
         <entry name="unitsChoice" type="Enum">
             <choices>
                 <choice name="Metric" />
@@ -255,7 +256,7 @@
                 <choice name="Hybrid (UK)" />
                 <choice name="Custom" />
             </choices>
-            <default>0</default>
+            <default>1</default>
         </entry>
         <entry name="windUnitsChoice" type="Enum">
             <choices>
