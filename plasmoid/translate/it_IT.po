@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmoid-wunderground\n"
 "Report-Msgid-Bugs-To: https://github.com/k-donn/plasmoid-wunderground\n"
-"POT-Creation-Date: 2026-08-29 14:25-0500\n"
+"POT-Creation-Date: 2026-10-10 22:23-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: undernature\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -232,6 +232,10 @@ msgid "Appearance"
 msgstr "Aspetto"
 
 #: ../contents/config/config.qml
+msgid "Text"
+msgstr ""
+
+#: ../contents/config/config.qml
 msgid "Layout"
 msgstr ""
 
@@ -336,8 +340,16 @@ msgid "Region: %1<br/>Action: %2<br/>Disclaimer: %3<br/>Issued by: %4"
 msgstr "Regione: %1<br/>Azione: %2<br/>Disclaimer: %3<br/>Rilasciato by: %4"
 
 #: ../contents/ui/BottomPanel.qml
+msgid "offline"
+msgstr ""
+
+#: ../contents/ui/BottomPanel.qml
 msgid "There are weather alerts for your area!"
 msgstr "Ci sono allerte meteo per la tua zona!"
+
+#: ../contents/ui/CompactRepresentation.qml ../contents/ui/FullRepresentation.qml
+msgid "Loading…"
+msgstr ""
 
 #: ../contents/ui/DayChartItem.qml
 msgctxt "per 12 hours, please keep it short"
@@ -438,11 +450,6 @@ msgstr "Alto: %1 Basso: %2"
 msgid "Loading..."
 msgstr "Caricamento..."
 
-#: ../contents/ui/config/ConfigAppearance.qml
-msgctxt "Use default font"
-msgid "Default"
-msgstr ""
-
 #: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigLayout.qml
 msgid "General"
 msgstr ""
@@ -504,6 +511,15 @@ msgid "Choose a Font:"
 msgstr ""
 
 #: ../contents/ui/config/ConfigAppearance.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose…"
+msgstr "Scegli…"
+
+#: ../contents/ui/config/ConfigAppearance.qml
 msgid "Text size mode:"
 msgstr ""
 
@@ -557,6 +573,10 @@ msgctxt "Abbreviation for seconds"
 msgid "sec"
 msgstr ""
 
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose a Font"
+msgstr "Scegli un Font"
+
 #: ../contents/ui/config/ConfigDebug.qml
 msgid "Write to console.log:"
 msgstr "Scrivere su console.log:"
@@ -566,7 +586,7 @@ msgid "Use Legacy Forecast API:"
 msgstr ""
 
 #: ../contents/ui/config/ConfigDebug.qml
-msgid "Startup time delay (ms):"
+msgid "Startup time delay (s):"
 msgstr ""
 
 #: ../contents/ui/config/ConfigLayout.qml
@@ -576,18 +596,6 @@ msgstr ""
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Used on the desktop or in a desktop grouper"
 msgstr ""
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property header text size"
-msgstr "Proprietà dimensione del testo dell'intestazione"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property text size"
-msgstr "Proprietà dimensione del testo"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Temperature text size"
-msgstr "Dimensione testo temperatura"
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "small (16x16)"
@@ -729,6 +737,102 @@ msgstr ""
 msgid "Refresh period (s):"
 msgstr "Intervallo di aggiornamento (s):"
 
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font family:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font (%1)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Headings:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bold"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Sizes (points)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Temperature:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Values:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Chart labels:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Text colour:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Automatic: best contrast with the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "White or black"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Tinted from the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Current automatic colour: %1"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml ../contents/ui/config/ConfigUnits.qml
+msgid "Custom"
+msgstr "Personalizzato"
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main colour at 75 %"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Plasma theme colours"
+msgstr ""
+
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Time/Date Format"
 msgstr ""
@@ -746,8 +850,8 @@ msgid "24hr time"
 msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
-msgid "Custom"
-msgstr "Personalizzato"
+msgid "System (KDE): %1"
+msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Day Chart time format:"
@@ -1044,6 +1148,15 @@ msgstr "Errore..."
 msgid "Refresh weather"
 msgstr "Aggiorna il meteo"
 
+#~ msgid "Property header text size"
+#~ msgstr "Proprietà dimensione del testo dell'intestazione"
+
+#~ msgid "Property text size"
+#~ msgstr "Proprietà dimensione del testo"
+
+#~ msgid "Temperature text size"
+#~ msgstr "Dimensione testo temperatura"
+
 #~ msgid "Details icon size:"
 #~ msgstr "Dettagli dimensione icona:"
 
@@ -1098,9 +1211,6 @@ msgstr "Aggiorna il meteo"
 #~ msgid "Choose Style…"
 #~ msgstr "Scegli lo Stile…"
 
-#~ msgid "Choose a Font"
-#~ msgstr "Scegli un Font"
-
 #~ msgid "Apply system colors to icons:"
 #~ msgstr "Applicare i colori di sistema alle icone:"
 
@@ -1115,9 +1225,6 @@ msgstr "Aggiorna il meteo"
 
 #~ msgid "Add"
 #~ msgstr "Aggiungi"
-
-#~ msgid "Choose…"
-#~ msgstr "Scegli…"
 
 #~ msgid "Station Info"
 #~ msgstr "Info stazione"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmoid-wunderground\n"
 "Report-Msgid-Bugs-To: https://github.com/k-donn/plasmoid-wunderground\n"
-"POT-Creation-Date: 2026-08-29 14:25-0500\n"
+"POT-Creation-Date: 2026-10-10 22:23-0400\n"
 "PO-Revision-Date: 2024-11-11 17:28+0800\n"
 "Last-Translator: CloverGit <clovergit@hotmail.com>\n"
 "Language-Team: Traditional Chinese <>\n"
@@ -232,6 +232,10 @@ msgid "Appearance"
 msgstr "外觀"
 
 #: ../contents/config/config.qml
+msgid "Text"
+msgstr ""
+
+#: ../contents/config/config.qml
 msgid "Layout"
 msgstr ""
 
@@ -336,8 +340,16 @@ msgid "Region: %1<br/>Action: %2<br/>Disclaimer: %3<br/>Issued by: %4"
 msgstr "地區: %1<br/>措施: %2<br/>免責聲明: %3<br/>發布者: %4"
 
 #: ../contents/ui/BottomPanel.qml
+msgid "offline"
+msgstr ""
+
+#: ../contents/ui/BottomPanel.qml
 msgid "There are weather alerts for your area!"
 msgstr "您的地區有天氣警報！"
+
+#: ../contents/ui/CompactRepresentation.qml ../contents/ui/FullRepresentation.qml
+msgid "Loading…"
+msgstr ""
 
 #: ../contents/ui/DayChartItem.qml
 msgctxt "per 12 hours, please keep it short"
@@ -438,11 +450,6 @@ msgstr "最高: %1 最低: %2"
 msgid "Loading..."
 msgstr "加載中..."
 
-#: ../contents/ui/config/ConfigAppearance.qml
-msgctxt "Use default font"
-msgid "Default"
-msgstr ""
-
 #: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigLayout.qml
 msgid "General"
 msgstr ""
@@ -504,6 +511,15 @@ msgid "Choose a Font:"
 msgstr ""
 
 #: ../contents/ui/config/ConfigAppearance.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose…"
+msgstr "選擇…"
+
+#: ../contents/ui/config/ConfigAppearance.qml
 msgid "Text size mode:"
 msgstr ""
 
@@ -557,6 +573,10 @@ msgctxt "Abbreviation for seconds"
 msgid "sec"
 msgstr ""
 
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose a Font"
+msgstr "選擇字體"
+
 #: ../contents/ui/config/ConfigDebug.qml
 msgid "Write to console.log:"
 msgstr "寫入 console.log:"
@@ -566,7 +586,7 @@ msgid "Use Legacy Forecast API:"
 msgstr ""
 
 #: ../contents/ui/config/ConfigDebug.qml
-msgid "Startup time delay (ms):"
+msgid "Startup time delay (s):"
 msgstr ""
 
 #: ../contents/ui/config/ConfigLayout.qml
@@ -576,18 +596,6 @@ msgstr ""
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Used on the desktop or in a desktop grouper"
 msgstr ""
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property header text size"
-msgstr "屬性標題文字大小"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property text size"
-msgstr "屬性文字大小"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Temperature text size"
-msgstr "溫度文字大小"
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "small (16x16)"
@@ -729,6 +737,102 @@ msgstr ""
 msgid "Refresh period (s):"
 msgstr "刷新週期 (秒):"
 
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font family:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font (%1)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Headings:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bold"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Sizes (points)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Temperature:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Values:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Chart labels:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Text colour:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Automatic: best contrast with the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "White or black"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Tinted from the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Current automatic colour: %1"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml ../contents/ui/config/ConfigUnits.qml
+msgid "Custom"
+msgstr "自定義"
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main colour at 75 %"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Plasma theme colours"
+msgstr ""
+
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Time/Date Format"
 msgstr ""
@@ -746,8 +850,8 @@ msgid "24hr time"
 msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
-msgid "Custom"
-msgstr "自定義"
+msgid "System (KDE): %1"
+msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Day Chart time format:"
@@ -1044,6 +1148,15 @@ msgstr "錯誤..."
 msgid "Refresh weather"
 msgstr "刷新天氣"
 
+#~ msgid "Property header text size"
+#~ msgstr "屬性標題文字大小"
+
+#~ msgid "Property text size"
+#~ msgstr "屬性文字大小"
+
+#~ msgid "Temperature text size"
+#~ msgstr "溫度文字大小"
+
 #~ msgid "Details icon size:"
 #~ msgstr "詳情圖標大小:"
 
@@ -1098,9 +1211,6 @@ msgstr "刷新天氣"
 #~ msgid "Choose Style…"
 #~ msgstr "選擇樣式…"
 
-#~ msgid "Choose a Font"
-#~ msgstr "選擇字體"
-
 #~ msgid "Apply system colors to icons:"
 #~ msgstr "將系統顏色應用於圖標:"
 
@@ -1115,9 +1225,6 @@ msgstr "刷新天氣"
 
 #~ msgid "Add"
 #~ msgstr "添加"
-
-#~ msgid "Choose…"
-#~ msgstr "選擇…"
 
 #~ msgid "Station Info"
 #~ msgstr "站點資訊"
