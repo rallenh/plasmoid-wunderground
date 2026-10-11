@@ -31,7 +31,8 @@ RowLayout {
     PlasmaComponents.Label {
         id: bottomPanelTime
 
-        text: weatherData["obsTimeLocal"] + " (" + plasmoid.configuration.refreshPeriod + "s)"
+        // "offline": the last refresh failed, the data shown is from the cache / an earlier fetch
+        text: weatherData["obsTimeLocal"] + (offline ? " · " + i18n("offline") : " (" + plasmoid.configuration.refreshPeriod + "s)")
 
         horizontalAlignment: Text.AlignLeft
 
