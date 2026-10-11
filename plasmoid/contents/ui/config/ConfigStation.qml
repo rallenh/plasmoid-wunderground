@@ -160,7 +160,7 @@ KCM.SimpleKCM {
                 icon.name: "earth"
                 onClicked: function() {
                     clearError();
-                    stationMapSearcher.open();
+                    stationConfig.openDialog(stationMapSearcherLoader);
                 }
             }
 
@@ -169,7 +169,7 @@ KCM.SimpleKCM {
                 icon.name: "find-location"
                 onClicked: function() {
                     clearError();
-                    stationSearcher.open();
+                    stationConfig.openDialog(stationSearcherLoader);
                 }
             }
 
@@ -178,7 +178,7 @@ KCM.SimpleKCM {
                 icon.name: "list-add"
                 onClicked: function() {
                     clearError();
-                    manualAdd.open();
+                    stationConfig.openDialog(manualAddLoader);
                 }
             }
 
@@ -226,37 +226,60 @@ KCM.SimpleKCM {
         Item { Layout.fillHeight: true }
     }
 
+    // The dialogs are created the first time they're opened, not with the page: the settings window rebuilds
+    // this page on every visit, and the map dialog pulls in Qt's map engine (QtLocation).
+    function openDialog(loader) {
+        loader.active = true;
+        loader.item.open();
+    }
+
     // Station Search Dialog
-    Lib.StationSearcher {
-        id: stationSearcher
-        onStationSelected: function (station) {
-            stationManager.addStation(station.stationID, station.placeName, station.latitude, station.longitude, function(err) {
-                stationConfig.errorType = err.type;
-                stationConfig.errorMessage = err.message;
-            });
-            stationSearcher.close()
+    Loader {
+        id: stationSearcherLoader
+        active: false
+        sourceComponent: Component {
+            Lib.StationSearcher {
+                id: stationSearcher
+                onStationSelected: function (station) {
+                    stationManager.addStation(station.stationID, station.placeName, station.latitude, station.longitude, function(err) {
+                        stationConfig.errorType = err.type;
+                        stationConfig.errorMessage = err.message;
+                    });
+                    stationSearcher.close()
+                }
+            }
         }
     }
 
     // Map Search Dialog
-    Lib.StationMapSearcher {
-        id: stationMapSearcher
-        onStationSelected: function (station) {
-            stationManager.addStation(station.stationID, station.address, station.latitude, station.longitude, function(err) {
-                stationConfig.errorType = err.type;
-                stationConfig.errorMessage = err.message;
-            });
+    Loader {
+        id: stationMapSearcherLoader
+        active: false
+        sourceComponent: Component {
+            Lib.StationMapSearcher {
+                onStationSelected: function (station) {
+                    stationManager.addStation(station.stationID, station.address, station.latitude, station.longitude, function(err) {
+                        stationConfig.errorType = err.type;
+                        stationConfig.errorMessage = err.message;
+                    });
+                }
+            }
         }
     }
 
     // Manual Add Dialog
-    Lib.ManualStationAdd {
-        id: manualAdd
-        onStationSelected: function (station) {
-            stationManager.addStation(station.stationID, station.address, 0, 0, function(err) {
-                stationConfig.errorType = err.type;
-                stationConfig.errorMessage = err.message;
-            });
+    Loader {
+        id: manualAddLoader
+        active: false
+        sourceComponent: Component {
+            Lib.ManualStationAdd {
+                onStationSelected: function (station) {
+                    stationManager.addStation(station.stationID, station.address, 0, 0, function(err) {
+                        stationConfig.errorType = err.type;
+                        stationConfig.errorMessage = err.message;
+                    });
+                }
+            }
         }
     }
 }
