@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmoid-wunderground\n"
 "Report-Msgid-Bugs-To: https://github.com/k-donn/plasmoid-wunderground\n"
-"POT-Creation-Date: 2026-08-29 14:25-0500\n"
+"POT-Creation-Date: 2026-10-20 22:37-0400\n"
 "PO-Revision-Date: DA-Mo-YEAR HO:MI+ZONE\n"
 "Last-Translator: Stefan Wannemacher <swannema@t-online.de>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -232,6 +232,10 @@ msgid "Appearance"
 msgstr "Aussehen"
 
 #: ../contents/config/config.qml
+msgid "Text"
+msgstr ""
+
+#: ../contents/config/config.qml
 msgid "Layout"
 msgstr "Layout"
 
@@ -336,8 +340,16 @@ msgid "Region: %1<br/>Action: %2<br/>Disclaimer: %3<br/>Issued by: %4"
 msgstr "Region: %1<br/>Aktion: %2<br/>Haftungsausschluss: %3<br/>Ausgestellt von: %4"
 
 #: ../contents/ui/BottomPanel.qml
+msgid "offline"
+msgstr ""
+
+#: ../contents/ui/BottomPanel.qml
 msgid "There are weather alerts for your area!"
 msgstr "Es gibt Wetterwarnungen für ihre Region!"
+
+#: ../contents/ui/CompactRepresentation.qml ../contents/ui/FullRepresentation.qml
+msgid "Loading…"
+msgstr ""
 
 #: ../contents/ui/DayChartItem.qml
 msgctxt "per 12 hours, please keep it short"
@@ -438,11 +450,6 @@ msgstr "Temp max.: %1               Temp min.: %2"
 msgid "Loading..."
 msgstr "Laden..."
 
-#: ../contents/ui/config/ConfigAppearance.qml
-msgctxt "Use default font"
-msgid "Default"
-msgstr "Standard"
-
 #: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigLayout.qml
 msgid "General"
 msgstr "Allgemein"
@@ -504,6 +511,15 @@ msgid "Choose a Font:"
 msgstr "Wähle Schriftart:"
 
 #: ../contents/ui/config/ConfigAppearance.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr "Standard"
+
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose…"
+msgstr ""
+
+#: ../contents/ui/config/ConfigAppearance.qml
 msgid "Text size mode:"
 msgstr "Textgrößenmodus:"
 
@@ -557,6 +573,10 @@ msgctxt "Abbreviation for seconds"
 msgid "sec"
 msgstr "sek"
 
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose a Font"
+msgstr ""
+
 #: ../contents/ui/config/ConfigDebug.qml
 msgid "Write to console.log:"
 msgstr "Schreibe in den console.log:"
@@ -566,8 +586,8 @@ msgid "Use Legacy Forecast API:"
 msgstr "Alte Vorhersage API verwenden:"
 
 #: ../contents/ui/config/ConfigDebug.qml
-msgid "Startup time delay (ms):"
-msgstr "Startverzögerung (ms):"
+msgid "Startup time delay (s):"
+msgstr ""
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Planar layout"
@@ -576,18 +596,6 @@ msgstr "Planare Anordnung"
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Used on the desktop or in a desktop grouper"
 msgstr "Auf dem Desktop oder in einem Desktop-Grouper verwendet"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property header text size"
-msgstr "Eigenschaften"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property text size"
-msgstr "Wetter-Werte"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Temperature text size"
-msgstr "Temperatur"
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "small (16x16)"
@@ -729,6 +737,102 @@ msgstr "Fehler (%1): %2"
 msgid "Refresh period (s):"
 msgstr "Aktualisieren (s):"
 
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font family:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font (%1)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Headings:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bold"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Sizes (points)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Temperature:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Values:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Chart labels:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Text colour:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Automatic: best contrast with the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "White or black"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Tinted from the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Current automatic colour: %1"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml ../contents/ui/config/ConfigUnits.qml
+msgid "Custom"
+msgstr "Individuell"
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main colour at 75 %"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Plasma theme colours"
+msgstr ""
+
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Time/Date Format"
 msgstr "Zeit- und Datumsformat"
@@ -746,8 +850,8 @@ msgid "24hr time"
 msgstr "24hr Zeit"
 
 #: ../contents/ui/config/ConfigUnits.qml
-msgid "Custom"
-msgstr "Individuell"
+msgid "System (KDE): %1"
+msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Day Chart time format:"
@@ -1043,3 +1147,15 @@ msgstr "Fehler..."
 #: ../contents/ui/main.qml
 msgid "Refresh weather"
 msgstr "Wetterdaten aktualisieren"
+
+#~ msgid "Startup time delay (ms):"
+#~ msgstr "Startverzögerung (ms):"
+
+#~ msgid "Property header text size"
+#~ msgstr "Eigenschaften"
+
+#~ msgid "Property text size"
+#~ msgstr "Wetter-Werte"
+
+#~ msgid "Temperature text size"
+#~ msgstr "Temperatur"

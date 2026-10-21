@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmoid-wunderground\n"
 "Report-Msgid-Bugs-To: https://github.com/k-donn/plasmoid-wunderground\n"
-"POT-Creation-Date: 2026-08-29 14:25-0500\n"
+"POT-Creation-Date: 2026-10-20 22:37-0400\n"
 "PO-Revision-Date: 2024-01-14 22:54+0900\n"
 "Last-Translator: Yuta Takahashi <y.highbridge04@gmail.com>\n"
 "Language-Team: Japanese-Team <LL@li.org>\n"
@@ -232,6 +232,10 @@ msgid "Appearance"
 msgstr "外観"
 
 #: ../contents/config/config.qml
+msgid "Text"
+msgstr ""
+
+#: ../contents/config/config.qml
 msgid "Layout"
 msgstr ""
 
@@ -336,8 +340,16 @@ msgid "Region: %1<br/>Action: %2<br/>Disclaimer: %3<br/>Issued by: %4"
 msgstr "地域: %1<br/>アクション: %2<br/>免責事項: %3<br/>発行者: %4"
 
 #: ../contents/ui/BottomPanel.qml
+msgid "offline"
+msgstr ""
+
+#: ../contents/ui/BottomPanel.qml
 msgid "There are weather alerts for your area!"
 msgstr "あなたの地域に気象警報があります!"
+
+#: ../contents/ui/CompactRepresentation.qml ../contents/ui/FullRepresentation.qml
+msgid "Loading…"
+msgstr ""
 
 #: ../contents/ui/DayChartItem.qml
 msgctxt "per 12 hours, please keep it short"
@@ -438,11 +450,6 @@ msgstr "最高: %1 最低: %2"
 msgid "Loading..."
 msgstr "読み込み中..."
 
-#: ../contents/ui/config/ConfigAppearance.qml
-msgctxt "Use default font"
-msgid "Default"
-msgstr "デフォルト"
-
 #: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigLayout.qml
 msgid "General"
 msgstr ""
@@ -504,6 +511,15 @@ msgid "Choose a Font:"
 msgstr ""
 
 #: ../contents/ui/config/ConfigAppearance.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr "デフォルト"
+
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose…"
+msgstr "選ぶ…"
+
+#: ../contents/ui/config/ConfigAppearance.qml
 msgid "Text size mode:"
 msgstr ""
 
@@ -557,6 +573,10 @@ msgctxt "Abbreviation for seconds"
 msgid "sec"
 msgstr ""
 
+#: ../contents/ui/config/ConfigAppearance.qml ../contents/ui/config/ConfigText.qml
+msgid "Choose a Font"
+msgstr "フォントを選択"
+
 #: ../contents/ui/config/ConfigDebug.qml
 msgid "Write to console.log:"
 msgstr "console.log に書き込みます:"
@@ -566,8 +586,8 @@ msgid "Use Legacy Forecast API:"
 msgstr "従来の予測 API を使用する:"
 
 #: ../contents/ui/config/ConfigDebug.qml
-msgid "Startup time delay (ms):"
-msgstr "起動時間遅延（ミリ秒）:"
+msgid "Startup time delay (s):"
+msgstr ""
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Planar layout"
@@ -576,18 +596,6 @@ msgstr ""
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Used on the desktop or in a desktop grouper"
 msgstr ""
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property header text size"
-msgstr "プロパティヘッダーのテキストサイズ"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property text size"
-msgstr "プロパティのテキストサイズ"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Temperature text size"
-msgstr "温度のテキストサイズ"
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "small (16x16)"
@@ -729,6 +737,102 @@ msgstr ""
 msgid "Refresh period (s):"
 msgstr "更新期間（秒）:"
 
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font"
+msgstr "フォント"
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font family:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font (%1)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Headings:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bold"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Sizes (points)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Temperature:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Values:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Chart labels:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Text colour:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Automatic: best contrast with the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "White or black"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Tinted from the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Current automatic colour: %1"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml ../contents/ui/config/ConfigUnits.qml
+msgid "Custom"
+msgstr "カスタム"
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main colour at 75 %"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Plasma theme colours"
+msgstr ""
+
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Time/Date Format"
 msgstr "時刻/日付の形式"
@@ -746,8 +850,8 @@ msgid "24hr time"
 msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
-msgid "Custom"
-msgstr "カスタム"
+msgid "System (KDE): %1"
+msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Day Chart time format:"
@@ -1044,6 +1148,18 @@ msgstr "エラー..."
 msgid "Refresh weather"
 msgstr "天気を更新"
 
+#~ msgid "Startup time delay (ms):"
+#~ msgstr "起動時間遅延（ミリ秒）:"
+
+#~ msgid "Property header text size"
+#~ msgstr "プロパティヘッダーのテキストサイズ"
+
+#~ msgid "Property text size"
+#~ msgstr "プロパティのテキストサイズ"
+
+#~ msgid "Temperature text size"
+#~ msgstr "温度のテキストサイズ"
+
 #~ msgid "Details icon size:"
 #~ msgstr "詳細アイコンのサイズ:"
 
@@ -1108,9 +1224,6 @@ msgstr "天気を更新"
 #~ msgid "Choose Style…"
 #~ msgstr "スタイルを選択…"
 
-#~ msgid "Choose a Font"
-#~ msgstr "フォントを選択"
-
 #~ msgid "System Tray Representation"
 #~ msgstr "システムトレイの表示"
 
@@ -1131,9 +1244,6 @@ msgstr "天気を更新"
 
 #~ msgid "Add"
 #~ msgstr "追加"
-
-#~ msgid "Choose…"
-#~ msgstr "選ぶ…"
 
 #~ msgid "DEWPOINT"
 #~ msgstr "露点温度"
@@ -1158,9 +1268,6 @@ msgstr "天気を更新"
 #~ msgctxt "Ultra Violet"
 #~ msgid "UV"
 #~ msgstr "紫外線"
-
-#~ msgid "Font"
-#~ msgstr "フォント"
 
 #~ msgid "Font size (0px=scale to widget)"
 #~ msgstr "フォントサイズ (0px=自動調整)"

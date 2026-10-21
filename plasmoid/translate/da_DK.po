@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmoid-wunderground\n"
 "Report-Msgid-Bugs-To: https://github.com/k-donn/plasmoid-wunderground\n"
-"POT-Creation-Date: 2026-08-29 14:25-0500\n"
+"POT-Creation-Date: 2026-10-20 22:37-0400\n"
 "PO-Revision-Date: 2026-10-02 18:44+0200\n"
 "Last-Translator: Martin Eilsøe <martin@eilsoe.dk>\n"
 "Language-Team: <ll@li.org>\n"
@@ -235,6 +235,10 @@ msgid "Appearance"
 msgstr "Udseende"
 
 #: ../contents/config/config.qml
+msgid "Text"
+msgstr ""
+
+#: ../contents/config/config.qml
 msgid "Layout"
 msgstr "Layout"
 
@@ -381,8 +385,17 @@ msgid "Region: %1<br/>Action: %2<br/>Disclaimer: %3<br/>Issued by: %4"
 msgstr "Region: %1<br/>Handling: %2<br/>Fraskrivelse: %3<br/>Udstedt af : %4"
 
 #: ../contents/ui/BottomPanel.qml
+msgid "offline"
+msgstr ""
+
+#: ../contents/ui/BottomPanel.qml
 msgid "There are weather alerts for your area!"
 msgstr "Der er varsler for området!"
+
+#: ../contents/ui/CompactRepresentation.qml
+#: ../contents/ui/FullRepresentation.qml
+msgid "Loading…"
+msgstr ""
 
 #: ../contents/ui/DayChartItem.qml
 msgctxt "per 12 hours, please keep it short"
@@ -490,11 +503,6 @@ msgid "Loading..."
 msgstr "Indlæser..."
 
 #: ../contents/ui/config/ConfigAppearance.qml
-msgctxt "Use default font"
-msgid "Default"
-msgstr "Standard"
-
-#: ../contents/ui/config/ConfigAppearance.qml
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "General"
 msgstr "Generel"
@@ -559,6 +567,16 @@ msgid "Choose a Font:"
 msgstr "Vælg skrifttype:"
 
 #: ../contents/ui/config/ConfigAppearance.qml
+msgctxt "Use default font"
+msgid "Default"
+msgstr "Standard"
+
+#: ../contents/ui/config/ConfigAppearance.qml
+#: ../contents/ui/config/ConfigText.qml
+msgid "Choose…"
+msgstr ""
+
+#: ../contents/ui/config/ConfigAppearance.qml
 msgid "Text size mode:"
 msgstr "Tekst størrelse:"
 
@@ -613,6 +631,11 @@ msgctxt "Abbreviation for seconds"
 msgid "sec"
 msgstr "s"
 
+#: ../contents/ui/config/ConfigAppearance.qml
+#: ../contents/ui/config/ConfigText.qml
+msgid "Choose a Font"
+msgstr "Vælg skrifttype"
+
 #: ../contents/ui/config/ConfigDebug.qml
 msgid "Write to console.log:"
 msgstr "Skriv til konsol log:"
@@ -622,8 +645,8 @@ msgid "Use Legacy Forecast API:"
 msgstr "Anvend ældre vejrudsigt API:"
 
 #: ../contents/ui/config/ConfigDebug.qml
-msgid "Startup time delay (ms):"
-msgstr "Start tid forsinkelse (ms):"
+msgid "Startup time delay (s):"
+msgstr ""
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Planar layout"
@@ -632,18 +655,6 @@ msgstr "Planar layout"
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "Used on the desktop or in a desktop grouper"
 msgstr "Anvendt på skrivebordet eller i skrivebords gruppering"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property header text size"
-msgstr "Tekst str. på egenskabs overskrift"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Property text size"
-msgstr "Tekst str. på egenskaber"
-
-#: ../contents/ui/config/ConfigLayout.qml
-msgid "Temperature text size"
-msgstr "Tekst størrelse for temperatur"
 
 #: ../contents/ui/config/ConfigLayout.qml
 msgid "small (16x16)"
@@ -789,6 +800,102 @@ msgstr "Fejl: (%1): %2"
 msgid "Refresh period (s):"
 msgstr "Opdaterings interval (s):"
 
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Font family:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font (%1)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "System font"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Headings:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bold"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Sizes (points)"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Temperature:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Values:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Default"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Chart labels:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Text colour:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Automatic: best contrast with the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "White or black"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Tinted from the wallpaper"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Current automatic colour: %1"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml ../contents/ui/config/ConfigUnits.qml
+msgid "Custom"
+msgstr "Tilpasset"
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text:"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main text colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Bottom row colour"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Main colour at 75 %"
+msgstr ""
+
+#: ../contents/ui/config/ConfigText.qml
+msgid "Plasma theme colours"
+msgstr ""
+
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Time/Date Format"
 msgstr "Tid/dato format"
@@ -806,8 +913,8 @@ msgid "24hr time"
 msgstr "24 timers ur"
 
 #: ../contents/ui/config/ConfigUnits.qml
-msgid "Custom"
-msgstr "Tilpasset"
+msgid "System (KDE): %1"
+msgstr ""
 
 #: ../contents/ui/config/ConfigUnits.qml
 msgid "Day Chart time format:"
@@ -1126,6 +1233,18 @@ msgstr "Fejl..."
 msgid "Refresh weather"
 msgstr "Opdater vejr"
 
+#~ msgid "Startup time delay (ms):"
+#~ msgstr "Start tid forsinkelse (ms):"
+
+#~ msgid "Property header text size"
+#~ msgstr "Tekst str. på egenskabs overskrift"
+
+#~ msgid "Property text size"
+#~ msgstr "Tekst str. på egenskaber"
+
+#~ msgid "Temperature text size"
+#~ msgstr "Tekst størrelse for temperatur"
+
 #~ msgid "AQI"
 #~ msgstr "AQI"
 
@@ -1207,9 +1326,6 @@ msgstr "Opdater vejr"
 
 #~ msgid "Choose Style…"
 #~ msgstr "Vælg stil…"
-
-#~ msgid "Choose a Font"
-#~ msgstr "Vælg skrifttype"
 
 #~ msgid "System Tray Representation"
 #~ msgstr "System Panel visning"
